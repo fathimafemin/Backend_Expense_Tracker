@@ -1,7 +1,6 @@
 from sqlalchemy import Column, Integer, String, Float, Date
 from db import Base
 from sqlalchemy import ForeignKey
-
 class User(Base):
     __tablename__ = "users"
 
