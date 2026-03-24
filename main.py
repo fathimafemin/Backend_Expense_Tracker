@@ -8,7 +8,7 @@ from model import User
 from auth import hash_password
 from auth import verify_password, create_access_token
 from auth import get_current_user
-
+from fastapi import HTTPException
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -81,3 +81,23 @@ def get_expenses(
     return db.query(ExpenseModel).filter(
         ExpenseModel.user_id == user_id
     ).all()
+
+@app.delete("/expenses/{id}")
+def delete_expense(
+    id: int,
+    user_id: int = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    
+    expense = db.query(ExpenseModel).filter(
+        ExpenseModel.id == id,
+        ExpenseModel.user_id == user_id
+    ).first()
+
+    if not expense:
+        raise HTTPException(status_code=404, detail="Expense not found")
+
+    db.delete(expense)
+    db.commit()
+
+    return {"message": "Deleted successfully"}
