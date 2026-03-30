@@ -10,6 +10,7 @@ from auth import verify_password, create_access_token
 from auth import get_current_user
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy import func, extract
 
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
@@ -99,6 +100,7 @@ def delete_expense(
     user_id: int = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    
     
     expense = db.query(ExpenseModel).filter(
         ExpenseModel.id == id,
