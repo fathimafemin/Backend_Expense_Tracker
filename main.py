@@ -11,7 +11,13 @@ from auth import get_current_user
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy import func, extract
+from fastapi.middleware.cors import CORSMiddleware
+import os
 
+origins = [
+    os.getenv("FRONTEND_URL"),
+    "http://localhost:3000"
+]
 Base.metadata.create_all(bind=engine)
 app = FastAPI()
 app.add_middleware(
